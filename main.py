@@ -64,23 +64,52 @@ class GenerateSampleImageAnot():
         self.imagePath = f"{self.root}/images"
         self.maskPath = f"{self.root}/masks"
         self.__makedir()
+        self.__generatedataset(num_images=size)
     
-    def __triangle(self):
-        pass
+    def __triangle(self, arr, xpos, ypos, size):
+        s = int(size / 2)
+        triangle = np.tril(np.ones((size, size), dtype=bool))
+        arr[xpos-s:xpos-s+triangle.shape[0],ypos-s:ypos-s+triangle.shape[1]] = triangle
+        return arr
     
-    def __rectangle(self):
-        pass
+    def __fillrectangle(self, arr, xpos, ypos, size):
+        s = int(size / 2)
+        arr[ypos-s:ypos+s, xpos-s:xpos+s] = 1
+        return arr
+    
+    def __rectangle(self, arr, xpos, ypos, size):
+        s = int(size / 2)
+        arr[xpos-s, ypos-s:ypos+s] = 1
+        arr[xpos+s, ypos-s:ypos+s+1] = 1
+        arr[xpos-s:xpos+s, ypos-s] = 1
+        arr[xpos-s:xpos+s, ypos+s] = 1
+        return arr
+    
+    def __plus(self, arr, xpos, ypos, size):
+        s = int(size / 2)
+        arr[xpos-1:xpos+1,ypos-s:ypos+s] = 1
+        arr[xpos-s:xpos+s,ypos-1:ypos+1] = 1
+        return arr
 
-    def __circle(self):
-        pass
+    def __circle(self, arr, xpos, ypos, size, fill=False):
+        xx, yy = np.mgrid[:arr.shape[0], :arr.shape[1]]
+        circle = np.sqrt((xx - xpos) ** 2 + (yy - ypos) ** 2)
+        new_arr = np.logical_or(arr, np.logical_and(circle < size, circle >= size * 0.7 if not fill else True))
+        return new_arr
 
-    def generateImage(self, triangleNum, circleNum, rectNum):
+    def generateImage(self, triangleNum, circleNum, rectNum, fillrectNum):
         pass
 
     def makeMask(self):
         pass
 
-    def __generatedataset(self):
+    def __generatedataset(self, num_images, shapes=(256, 256)):
+        for i in range(num_images):
+            canvas = np.zeros(shape=shapes)
+            image = self.generateImage(canvas)
+            mask = self.makeMask(image)
+            plt.imsave(f"{self.imagePath}/image{i}.jpg", image)
+            plt.imsave(f"{self.imagePath}/mask{i}.jpg", mask)
         pass
 
     def __makedir(self):

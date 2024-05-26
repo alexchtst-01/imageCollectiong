@@ -1,3 +1,4 @@
+import os
 import cv2 as cv
 import random
 import numpy as np 
@@ -10,12 +11,12 @@ class collectImage:
         self.manual = manual
         self.num = num
 
-        self.__run__()
+        self.__run()
     
-    def __getImage__(self, idx, img):
+    def __getImage(self, idx, img):
         cv.imwrite(f"{self.root}/{idx}.jpg", img)
     
-    def __run__(self):
+    def __run(self):
         cap = cv.VideoCapture(self.videoDirectory)
         if not cap.isOpened():
             print("not started .....")
@@ -33,7 +34,7 @@ class collectImage:
 
                 cv.imshow(title, frame)
                 if cv.waitKey(1) == 32:
-                    self.__getImage__(idx=i, img=frame)
+                    self.__getImage(idx=i, img=frame)
                     i += 1
                     newTitle = f"{i} image has been captured >press space to take 1 image"
                     cv.setWindowTitle(title, newTitle)
@@ -47,7 +48,7 @@ class collectImage:
                 ret, frame = cap.read()
                 if not ret:
                     break
-                self.__getImage__(idx=i, img=frame)
+                self.__getImage(idx=i, img=frame)
 
         cap.release()
         cv.destroyAllWindows()
@@ -59,12 +60,29 @@ class collectImage:
 class GenerateSampleImageAnot():
     def __init__(self, root, size=5):
         self.root = root
+        
+        self.imagePath = f"{self.root}/images"
+        self.maskPath = f"{self.root}/masks"
+        self.__makedir()
     
-    def generateImage(self):
+    def __triangle(self):
+        pass
+    
+    def __rectangle(self):
+        pass
+
+    def __circle(self):
+        pass
+
+    def generateImage(self, triangleNum, circleNum, rectNum):
         pass
 
     def makeMask(self):
         pass
 
-    def __generatedataset__(self):
+    def __generatedataset(self):
         pass
+
+    def __makedir(self):
+        os.mkdir(self.imagePath)
+        os.mkdir(self.maskPath)

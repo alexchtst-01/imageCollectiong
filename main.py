@@ -1,5 +1,7 @@
 import cv2 as cv
 import random
+import numpy as np 
+from matplotlib import pyplot as plt
 
 class collectImage:
     def __init__(self, root, videoDirectory, num=5, manual=False):
@@ -53,3 +55,16 @@ class collectImage:
 
 # how to use
 # test = collectImage(root="datares", videoDirectory="./video/sample.mp4", manual=True)
+
+class GenerateSampleImageAnot():
+    def __init__(self, root, size=5):
+        self.root = root
+    
+    def generateImage(self):
+        pass
+
+    def makeMask(self):
+        pass
+
+    def __generatedataset__(self):
+        pass
